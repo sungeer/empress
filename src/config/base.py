@@ -4,7 +4,8 @@ base_dir = Path(__file__).resolve().parent.parent.parent
 
 
 class BaseConfig:
-    log_path = base_dir / 'logs/app_{time:YYYY-MM-DD}.log'
+    log_path = base_dir / 'logs/app.log'
+    error_log_path = base_dir / 'logs/error.log'
 
     jwt_algorithm = 'HS256'  # 加密算法
     jwt_access_token_expire_minutes = 30  # 访问令牌有效期 30分钟
