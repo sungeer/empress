@@ -27,4 +27,5 @@ def check_db_conn():
 
 
 def register_jobs(scheduler):
-    scheduler.add_job(check_db_conn, 'interval', seconds=60, id='haiku.some_job')
+    scheduler.add_job(check_db_conn, 'interval', seconds=60, id='haiku.some_job', executor='io_tasks')
+    # scheduler.add_job(cpu_intensive_task, 'cron', hour=2, executor='cpu_tasks')
