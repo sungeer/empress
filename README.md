@@ -17,7 +17,7 @@ copy `.env.example` to `.env` and fill in required values.
 then run:
 
 ```
-$ .venv\Scripts\python.exe main.py
+$ .venv\Scripts\python.exe run.py
 ```
 
 ## License
