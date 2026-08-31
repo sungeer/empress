@@ -1,0 +1,35 @@
+import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+# 项目根目录
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# 加载 .env 若存在
+_dotenv_path = BASE_DIR / '.env'
+if _dotenv_path.exists():
+    load_dotenv(_dotenv_path)
+
+
+def _require(name: str) -> str:
+    # 必填环境变量，缺失时启动即报错（fail fast）
+    value = os.getenv(name)
+    if value is None:
+        raise RuntimeError(f'Missing required environment variables: {name}')
+    return value
+
+
+# 环境
+_ENVIRONMENTS = ('development', 'testing', 'production')
+ENVIRONMENT = _require('ENVIRONMENT')
+if ENVIRONMENT not in _ENVIRONMENTS:
+    raise ValueError(f'Invalid ENVIRONMENT: {ENVIRONMENT}，only allowed {sorted(_ENVIRONMENTS)}')
+
+# 日志
+LOG_FILE = Path(os.getenv('LOG_FILE', default=str(BASE_DIR / 'logs/empress.log')))
+
+# 调度器
+TIMEZONE = os.getenv('TIMEZONE', default='Asia/Shanghai')
+TASK_WORKERS = int(os.getenv('TASK_WORKERS', default='20'))
+MISFIRE_GRACE_TIME = int(os.getenv('MISFIRE_GRACE_TIME', default='60'))

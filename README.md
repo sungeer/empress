@@ -1,26 +1,23 @@
-# waitress
+# empress
 
 *Scheduled Tasks Based on APScheduler.*
 
 ## Installation
 
-clone:
-```
-$ git clone git@github.com:sungeer/empress.git
-$ cd empress
-```
 create & activate virtual env then install dependency:
 
-with venv/virtualenv + pip:
 ```
-$ python -m venv env  # use `python3 ...` for Python3 on Linux & macOS
-$ source env/bin/activate  # use `env\Scripts\activate` on Windows
-$ pip install -r requirements.txt
+$ python -m venv .venv
+$ .venv\Scripts\activate
+$ .venv\Scripts\pip.exe install APScheduler loguru requests python-dotenv
 ```
+
+copy `.env.example` to `.env` and fill in required values.
+
 then run:
+
 ```
-$ uvicorn waitress:app --port 8848
-* Running on http://127.0.0.1:8848/
+$ .venv\Scripts\python.exe main.py
 ```
 
 ## License
