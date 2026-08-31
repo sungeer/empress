@@ -1,3 +1,4 @@
+import os
 import signal
 
 from src import tasks
@@ -13,12 +14,12 @@ def run():
     for job_id, func, kwargs in tasks.JOBS:
         scheduler.add_job(func, id=job_id, replace_existing=True, **kwargs)
 
-    def _graceful_shutdown(_signum, _frame):
-        # 收到 SIGTERM/SIGINT 时优雅退出：等待正在执行的任务结束
-        scheduler.shutdown(wait=True)
+    def _stop(_signum, _frame):
+        # 收到 SIGTERM/SIGINT 立即退出，不等正在执行的任务
+        os._exit(0)
 
-    signal.signal(signal.SIGTERM, _graceful_shutdown)
-    signal.signal(signal.SIGINT, _graceful_shutdown)
+    signal.signal(signal.SIGTERM, _stop)
+    signal.signal(signal.SIGINT, _stop)
 
     scheduler.start()  # 阻塞，进程常驻
 
