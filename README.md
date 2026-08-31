@@ -1,13 +1,13 @@
 # waitress
 
-*An api built with Starlette and APScheduler.*
+*Scheduled Tasks Based on APScheduler.*
 
 ## Installation
 
 clone:
 ```
-$ git clone git@github.com:sungeer/waitress.git
-$ cd waitress
+$ git clone git@github.com:sungeer/empress.git
+$ cd empress
 ```
 create & activate virtual env then install dependency:
 
