@@ -5,11 +5,18 @@ from loguru import logger
 from src import settings
 
 
+def _inject_trace_id(record):
+    # 未绑定 trace_id 的日志（如启动日志）回落到 '-'
+    record['extra'].setdefault('trace_id', '-')
+
+
 def setup_logger():
     logger.remove()
 
+    logger.configure(patcher=_inject_trace_id)
+
     fmt = (
-        '{time:YYYY-MM-DD HH:mm:ss.SSS} - {level} - '
+        '{time:YYYY-MM-DD HH:mm:ss.SSS} - [{extra[trace_id]}] - {level} - '
         '{name}:{function}:{line} - {message}'
     )
 

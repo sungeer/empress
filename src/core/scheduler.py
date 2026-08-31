@@ -1,7 +1,19 @@
 from apscheduler.executors.pool import ThreadPoolExecutor
 from apscheduler.schedulers.blocking import BlockingScheduler
+from loguru import logger
 
 from src import settings
+from src.core.context import new_trace_id
+
+
+def _with_trace(job_id, func):
+    # 每次任务执行生成唯一 trace_id，作用域内日志自动带上；闭包不可 pickle，
+    # 但当前 job 不持久化（纯内存 add_job），故可用
+    def wrapper(*args, **kwargs):
+        trace_id = new_trace_id(job_id)
+        with logger.contextualize(trace_id=trace_id):
+            return func(*args, **kwargs)
+    return wrapper
 
 
 def build_scheduler() -> BlockingScheduler:
