@@ -5,11 +5,17 @@ from loguru import logger
 from src import settings
 
 
+def _inject_trace_id(record):
+    record['extra'].setdefault('trace_id', '-')
+
+
 def setup_logger():
     logger.remove()
 
+    logger.configure(patcher=_inject_trace_id)
+
     fmt = (
-        '{time:YYYY-MM-DD HH:mm:ss.SSS} - {level} - '
+        '{time:YYYY-MM-DD HH:mm:ss.SSS} - [{extra[trace_id]}] - {level} - '
         '{name}:{function}:{line} - {message}'
     )
 

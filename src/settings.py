@@ -29,6 +29,8 @@ if ENVIRONMENT not in _ENVIRONMENTS:
 # 日志
 LOG_FILE = Path(os.getenv('LOG_FILE', default=str(BASE_DIR / 'logs/empress.log')))
 
+VERSION = '26.0901.1811'
+
 # 调度器
 TIMEZONE = os.getenv('TIMEZONE', default='Asia/Shanghai')
 TASK_WORKERS = int(os.getenv('TASK_WORKERS', default='20'))
