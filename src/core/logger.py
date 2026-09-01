@@ -36,7 +36,7 @@ def setup_logger():
         diagnose=False,
         backtrace=False,
         colorize=False,
-        enqueue=True,
+        enqueue=False,
         level='INFO',
         encoding='utf-8',
         rotation='200 MB',
