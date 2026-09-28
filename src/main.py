@@ -2,9 +2,9 @@ import logging
 import os
 import time
 
-from src import tasks
 from src.core.logger import setup_logger
 from src.core.scheduler import build_scheduler
+from src.tasks.registry import register_jobs
 
 logger = logging.getLogger(__name__)
 
@@ -12,17 +12,15 @@ logger = logging.getLogger(__name__)
 def run():
     setup_logger()
 
-    scheduler = build_scheduler()
+    try:
+        scheduler = build_scheduler()
+        register_jobs(scheduler)
+        scheduler.start()
+    except Exception:
+        logger.exception('scheduler failed to start')
+        raise
 
-    for job_id, func, kwargs in tasks.JOBS:
-        scheduler.add_job(
-            func,
-            id=job_id,
-            replace_existing=True,
-            **kwargs
-        )
-
-    scheduler.start()
+    logger.info('scheduler started: %d jobs', len(scheduler.get_jobs()))
 
     try:
         while True:
