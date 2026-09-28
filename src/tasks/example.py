@@ -1,4 +1,6 @@
-from loguru import logger
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 # 示例任务（每 3 分钟跑一次），真实业务替换函数体即可

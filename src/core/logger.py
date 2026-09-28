@@ -1,52 +1,37 @@
+import logging
 import sys
-
-from loguru import logger
 
 from src import settings
 
-_LEVEL_ABBR = {
-    'TRACE': 'TRC',
-    'DEBUG': 'DBG',
-    'INFO': 'INF',
-    'SUCCESS': 'SUC',
-    'WARNING': 'WRN',
-    'ERROR': 'ERR',
-    'CRITICAL': 'CRT'
-}
-
-
-def _patch_record(record):
-    record['level'].name = _LEVEL_ABBR.get(record['level'].name, record['level'].name)
-
 
 def setup_logger():
-    logger.remove()
-    logger.configure(patcher=_patch_record)
+    root = logging.getLogger()
 
-    fmt = '{time:HH:mm:ss.SSS} | {level} | {message} ({name}:{line})'
+    if root.handlers:
+        return
+
+    logging.addLevelName(logging.DEBUG, 'DBG')
+    logging.addLevelName(logging.INFO, 'INF')
+    logging.addLevelName(logging.WARNING, 'WRN')
+    logging.addLevelName(logging.ERROR, 'ERR')
+    logging.addLevelName(logging.CRITICAL, 'CRT')
+
+    logging.getLogger('apscheduler').setLevel(logging.WARNING)
+
+    root.setLevel(logging.INFO)
+
+    formatter = logging.Formatter(
+        fmt='%(asctime)s | %(levelname)s | %(message)s (%(name)s:%(lineno)d)',
+        datefmt='%H:%M:%S'
+    )
 
     if settings.ENVIRONMENT == 'development':
-        logger.add(
-            sys.stdout,
-            format=fmt,
-            diagnose=False,
-            backtrace=False,
-            colorize=False,
-            enqueue=False,
-            level='INFO',
-        )
+        console_handler = logging.StreamHandler(sys.stdout)
+        console_handler.setFormatter(formatter)
+        root.addHandler(console_handler)
 
-    log_file = settings.LOG_DIR / 'empress_{time:YYYY-MM-DD}.log'
+    log_file = settings.LOG_DIR / 'empress.log'
 
-    logger.add(
-        log_file,
-        format=fmt,
-        diagnose=False,
-        backtrace=False,
-        colorize=False,
-        enqueue=False,
-        level='INFO',
-        encoding='utf-8',
-        rotation='00:00',
-        retention='14 days',
-    )
+    file_handler = logging.FileHandler(log_file, encoding='utf-8')
+    file_handler.setFormatter(formatter)
+    root.addHandler(file_handler)
