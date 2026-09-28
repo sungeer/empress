@@ -1,14 +1,12 @@
 import logging
 import sys
+from logging.handlers import TimedRotatingFileHandler
 
 from src import settings
 
 
 def setup_logger():
     root = logging.getLogger()
-
-    if root.handlers:
-        return
 
     logging.addLevelName(logging.DEBUG, 'DBG')
     logging.addLevelName(logging.INFO, 'INF')
@@ -32,6 +30,11 @@ def setup_logger():
 
     log_file = settings.LOG_DIR / 'empress.log'
 
-    file_handler = logging.FileHandler(log_file, encoding='utf-8')
+    file_handler = TimedRotatingFileHandler(
+        log_file,
+        when='midnight',
+        backupCount=14,
+        encoding='utf-8'
+    )
     file_handler.setFormatter(formatter)
     root.addHandler(file_handler)
