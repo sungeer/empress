@@ -4,14 +4,26 @@ from loguru import logger
 
 from src import settings
 
+_LEVEL_ABBR = {
+    'TRACE': 'TRC',
+    'DEBUG': 'DBG',
+    'INFO': 'INF',
+    'SUCCESS': 'SUC',
+    'WARNING': 'WRN',
+    'ERROR': 'ERR',
+    'CRITICAL': 'CRT'
+}
+
+
+def _patch_record(record):
+    record['level'].name = _LEVEL_ABBR.get(record['level'].name, record['level'].name)
+
 
 def setup_logger():
     logger.remove()
+    logger.configure(patcher=_patch_record)
 
-    fmt = (
-        '{time:YYYY-MM-DD HH:mm:ss.SSS} - {level} - '
-        '{name}:{function}:{line} - {message}'
-    )
+    fmt = '{time:HH:mm:ss.SSS} | {level} | {message} ({name}:{line})'
 
     if settings.ENVIRONMENT == 'development':
         logger.add(
@@ -24,15 +36,17 @@ def setup_logger():
             level='INFO',
         )
 
+    log_file = settings.LOG_DIR / 'empress_{time:YYYY-MM-DD}.log'
+
     logger.add(
-        settings.LOG_FILE,
+        log_file,
         format=fmt,
         diagnose=False,
         backtrace=False,
         colorize=False,
-        enqueue=False,
+        enqueue=True,
         level='INFO',
         encoding='utf-8',
-        rotation='200 MB',
-        retention=2,
+        rotation='00:00',
+        retention='14 days',
     )

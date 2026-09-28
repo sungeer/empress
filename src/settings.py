@@ -27,7 +27,7 @@ if ENVIRONMENT not in _ENVIRONMENTS:
     raise ValueError(f'Invalid ENVIRONMENT: {ENVIRONMENT}，only allowed {sorted(_ENVIRONMENTS)}')
 
 # 日志
-LOG_FILE = Path(os.getenv('LOG_FILE', default=str(BASE_DIR / 'logs/empress.log')))
+LOG_DIR = Path(os.getenv('LOG_DIR', default=str(BASE_DIR / 'logs')))
 
 VERSION = '26.0928.0951'
 
