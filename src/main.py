@@ -4,7 +4,7 @@ import time
 
 from src.core.logger import setup_logger
 from src.core.scheduler import build_scheduler
-from src.tasks.registry import register_jobs
+from src.jobs import register_jobs
 
 logger = logging.getLogger(__name__)
 
