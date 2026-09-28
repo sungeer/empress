@@ -6,7 +6,7 @@ from src import settings
 
 
 def setup_logger():
-    root = logging.getLogger()
+    root_logger = logging.getLogger()
 
     logging.addLevelName(logging.DEBUG, 'DBG')
     logging.addLevelName(logging.INFO, 'INF')
@@ -14,9 +14,9 @@ def setup_logger():
     logging.addLevelName(logging.ERROR, 'ERR')
     logging.addLevelName(logging.CRITICAL, 'CRT')
 
-    logging.getLogger('apscheduler').setLevel(logging.WARNING)
+    root_logger.setLevel(logging.INFO)
 
-    root.setLevel(logging.INFO)
+    logging.getLogger('apscheduler').setLevel(logging.WARNING)
 
     formatter = logging.Formatter(
         fmt='%(asctime)s | %(levelname)s | %(message)s (%(name)s:%(lineno)d)',
@@ -26,7 +26,7 @@ def setup_logger():
     if settings.ENVIRONMENT == 'development':
         console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setFormatter(formatter)
-        root.addHandler(console_handler)
+        root_logger.addHandler(console_handler)
 
     log_file = settings.LOG_DIR / 'empress.log'
 
@@ -37,4 +37,4 @@ def setup_logger():
         encoding='utf-8'
     )
     file_handler.setFormatter(formatter)
-    root.addHandler(file_handler)
+    root_logger.addHandler(file_handler)
