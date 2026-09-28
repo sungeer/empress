@@ -28,9 +28,9 @@ def run():
         while True:
             time.sleep(0.1)
     except KeyboardInterrupt:
-        logger.info('收到停止信号')
-        os._exit(0)
+        logger.info('scheduler shutdown')
         # scheduler.shutdown()
+        os._exit(0)
 
 
 if __name__ == '__main__':
