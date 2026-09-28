@@ -1,11 +1,11 @@
 from apscheduler.executors.pool import ThreadPoolExecutor
-from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 
 from src import settings
 
 
-def build_scheduler() -> BlockingScheduler:
-    return BlockingScheduler(
+def build_scheduler() -> BackgroundScheduler:
+    scheduler = BackgroundScheduler(
         executors={
             'default': ThreadPoolExecutor(settings.TASK_WORKERS),  # 任务可互相并行
         },
@@ -16,3 +16,4 @@ def build_scheduler() -> BlockingScheduler:
         },
         timezone=settings.TIMEZONE,
     )
+    return scheduler
