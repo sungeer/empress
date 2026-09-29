@@ -3,6 +3,7 @@ import os
 import time
 
 from src.core.logger import setup_logger
+from src.core.http_client import httpx
 from src.core.scheduler import build_scheduler
 from src.jobs import register_jobs
 
@@ -11,6 +12,8 @@ logger = logging.getLogger(__name__)
 
 def run():
     setup_logger()
+
+    httpx.init()
 
     try:
         scheduler = build_scheduler()

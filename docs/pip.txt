@@ -6,7 +6,9 @@ pip install -r requirements.txt
 
 
 
-python -m pip install APScheduler loguru requests python-dotenv
+python -m pip install APScheduler python-dotenv
+
+python -m pip install httpx2
 
 
 

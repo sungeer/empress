@@ -9,7 +9,7 @@ create & activate virtual env then install dependency:
 ```
 $ python -m venv .venv
 $ .venv\Scripts\activate
-$ .venv\Scripts\pip.exe install APScheduler loguru requests python-dotenv
+$ .venv\Scripts\pip.exe install APScheduler httpx2 python-dotenv
 ```
 
 copy `.env.example` to `.env` and fill in required values.
