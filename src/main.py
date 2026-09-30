@@ -11,6 +11,7 @@ from src.jobs import register_jobs
 logger = logging.getLogger(__name__)
 
 
+# noinspection PyUnusedLocal
 def _on_sigterm(signum, frame):
     raise KeyboardInterrupt
 
