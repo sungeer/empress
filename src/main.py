@@ -12,37 +12,33 @@ logger = logging.getLogger(__name__)
 
 
 def _on_sigterm(signum, frame):
-    """Python 默认只把 SIGINT 转成 KeyboardInterrupt
-    SIGTERM 不处理会直接终止进程
-    """
     raise KeyboardInterrupt
 
 
 def run():
     setup_logger()
 
+    signal.signal(signal.SIGTERM, _on_sigterm)
+
     httpx.init()
 
     try:
         scheduler = build_scheduler()
         register_jobs(scheduler)
+
+        logger.info('registered %d jobs', len(scheduler.get_jobs()))
+
         scheduler.start()
+
+        logger.info('scheduler started')
     except Exception:
         logger.exception('scheduler failed to start')
         raise
 
-    logger.info('scheduler started: %d jobs', len(scheduler.get_jobs()))
-
-    signal.signal(signal.SIGTERM, _on_sigterm)
-
     try:
         while True:
-            time.sleep(0.1)
+            time.sleep(1)
     except KeyboardInterrupt:
         logger.info('scheduler shutdown')
-
-        # scheduler.shutdown()
-
-        httpx.close()
 
         os._exit(0)
