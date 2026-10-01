@@ -1,6 +1,6 @@
 import logging
 import sys
-from logging.handlers import TimedRotatingFileHandler
+# from logging.handlers import TimedRotatingFileHandler
 
 from src import settings
 
@@ -18,10 +18,9 @@ def setup_logger():
 
     logging.getLogger('apscheduler').setLevel(logging.WARNING)
 
-    formatter = logging.Formatter(
-        fmt='%(asctime)s | %(levelname)s | %(message)s (%(name)s:%(lineno)d)',
-        datefmt='%H:%M:%S'
-    )
+    fmt = '%(asctime)s | %(levelname)s | %(message)s (%(name)s:%(lineno)d)'
+
+    formatter = logging.Formatter(fmt=fmt)
 
     if settings.ENVIRONMENT == 'development':
         console_handler = logging.StreamHandler(sys.stdout)
@@ -30,10 +29,15 @@ def setup_logger():
 
     log_file = settings.LOG_DIR / 'empress.log'
 
-    file_handler = TimedRotatingFileHandler(
+    # file_handler = TimedRotatingFileHandler(
+    #     log_file,
+    #     when='midnight',
+    #     backupCount=14,
+    #     encoding='utf-8'
+    # )
+
+    file_handler = logging.FileHandler(
         log_file,
-        when='midnight',
-        backupCount=14,
         encoding='utf-8'
     )
     file_handler.setFormatter(formatter)
