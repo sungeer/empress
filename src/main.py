@@ -44,4 +44,6 @@ def run():
     except KeyboardInterrupt:
         logger.info('scheduler shutdown')
 
+        # scheduler.shutdown(wait=True)  # 等待正在执行的任务结束
+
         os._exit(0)
