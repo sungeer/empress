@@ -19,12 +19,14 @@ def _on_sigterm(signum, frame):
 def run():
     setup_logger()
 
-    signal.signal(signal.SIGTERM, _on_sigterm)
+    signal.signal(signal.SIGTERM, _on_sigterm)  # linux
+    signal.signal(signal.SIGINT, _on_sigterm)  # windows
 
     httpx.init()
 
     try:
         scheduler = build_scheduler()
+
         register_jobs(scheduler)
 
         logger.info('registered %d jobs', len(scheduler.get_jobs()))
@@ -38,7 +40,7 @@ def run():
 
     try:
         while True:
-            time.sleep(1)
+            time.sleep(0.1)
     except KeyboardInterrupt:
         logger.info('scheduler shutdown')
 

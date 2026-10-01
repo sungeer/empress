@@ -33,5 +33,5 @@ VERSION = '26.0929.0917'
 
 # 调度器
 TIMEZONE = os.getenv('TIMEZONE', default='Asia/Shanghai')
-TASK_WORKERS = int(os.getenv('TASK_WORKERS', default='20'))
+TASK_WORKERS = int(os.getenv('TASK_WORKERS', default='40'))
 MISFIRE_GRACE_TIME = int(os.getenv('MISFIRE_GRACE_TIME', default='60'))
