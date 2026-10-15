@@ -29,7 +29,7 @@ if ENVIRONMENT not in _ENVIRONMENTS:
 # 日志
 LOG_DIR = Path(os.getenv('LOG_DIR', default=str(BASE_DIR / 'logs')))
 
-VERSION = '26.1015.1723'
+VERSION = '26.1015.1729'
 
 # 调度器
 TIMEZONE = os.getenv('TIMEZONE', default='Asia/Shanghai')

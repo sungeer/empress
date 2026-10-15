@@ -1,6 +1,7 @@
 import logging
 import os
 import signal
+import sys
 import time
 
 from src.core.logger import setup_logger
@@ -11,31 +12,36 @@ from src.jobs import register_jobs
 logger = logging.getLogger(__name__)
 
 
-def on_sigterm(signum, frame):
+def handle_uncaught_exception(exc_type, exc_value, exc_traceback):
+    logger.critical(
+        'uncaught exception',
+        exc_info=(exc_type, exc_value, exc_traceback),
+    )
+
+
+def on_sigterm(signum, frame):  # noqa
     raise KeyboardInterrupt
 
 
 def run():
     setup_logger()
 
+    sys.excepthook = handle_uncaught_exception
+
     signal.signal(signal.SIGTERM, on_sigterm)  # linux
     signal.signal(signal.SIGINT, on_sigterm)  # windows
 
     httpx.init()
 
-    try:
-        scheduler = build_scheduler()
+    scheduler = build_scheduler()
 
-        register_jobs(scheduler)
+    register_jobs(scheduler)
 
-        logger.info('registered %d jobs', len(scheduler.get_jobs()))
+    logger.info('registered %d jobs', len(scheduler.get_jobs()))
 
-        scheduler.start()
+    scheduler.start()
 
-        logger.info('scheduler started')
-    except Exception:
-        logger.exception('scheduler failed to start')
-        raise
+    logger.info('scheduler started')
 
     try:
         while True:
