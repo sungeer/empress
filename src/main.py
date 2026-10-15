@@ -11,16 +11,15 @@ from src.jobs import register_jobs
 logger = logging.getLogger(__name__)
 
 
-# noinspection PyUnusedLocal
-def _on_sigterm(signum, frame):
+def on_sigterm(signum, frame):
     raise KeyboardInterrupt
 
 
 def run():
     setup_logger()
 
-    signal.signal(signal.SIGTERM, _on_sigterm)  # linux
-    signal.signal(signal.SIGINT, _on_sigterm)  # windows
+    signal.signal(signal.SIGTERM, on_sigterm)  # linux
+    signal.signal(signal.SIGINT, on_sigterm)  # windows
 
     httpx.init()
 
