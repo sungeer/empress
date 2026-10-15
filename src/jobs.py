@@ -19,7 +19,7 @@ def register_jobs(scheduler):
     scheduler.add_job(
         task_c, id='task_c',
         replace_existing=True,
-        trigger=IntervalTrigger(minutes=3)
+        trigger=IntervalTrigger(minutes=3)  # 每 3 分钟一次
     )
     scheduler.add_job(
         daily_cleanup, id='daily_cleanup',
